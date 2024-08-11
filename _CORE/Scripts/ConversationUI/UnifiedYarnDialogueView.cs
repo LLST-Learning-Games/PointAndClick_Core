@@ -19,15 +19,18 @@ namespace Conversation.UI
 
         public override void RunLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
+            Debug.Log("Running line - " + dialogueLine.Text.Text);
             lineText.text = dialogueLine.Text.Text;
-            onDialogueLineFinished?.Invoke();
+            //onDialogueLineFinished?.Invoke();
         }
 
         public override void RunOptions(DialogueOption[] dialogueOptions, Action<int> onOptionSelected)
         {
+            Debug.Log("Running options...");
             // If we don't already have enough option views, create more
             while (dialogueOptions.Length > optionViews.Count)
             {
+                Debug.Log("Creating new option view");
                 var optionView = CreateNewOptionView();
                 optionView.gameObject.SetActive(false);
             }
@@ -37,8 +40,10 @@ namespace Conversation.UI
 
             for (int i = 0; i < dialogueOptions.Length; i++)
             {
+
                 var optionView = optionViews[i];
                 var option = dialogueOptions[i];
+                Debug.Log("Init dialogue option " + i + " text: " + option.Line.Text.Text);
 
                 if (option.IsAvailable == false)
                 {
@@ -89,9 +94,28 @@ namespace Conversation.UI
             /// </summary>
             void OptionViewWasSelected(DialogueOption option)
             {
+
+                Debug.Log("Selected option " + option.Line.Text.Text);
+                foreach (var optionView in optionViews)
+                {
+                    optionView.gameObject.SetActive(false);
+                }
+
                 OnOptionSelected(option.DialogueOptionID);
             }
         }
+
+        public override void DialogueComplete()
+        {
+
+            Debug.Log("Dialogue complete");
+            OnOptionSelected = null;
+            foreach (var optionView in optionViews)
+            {
+                optionView.gameObject.SetActive(false);
+            }
+        }
+
         public void OnContinueClicked()
         {
             requestInterrupt?.Invoke();
