@@ -14,11 +14,21 @@ namespace Conversation.UI
         [SerializeField] protected GameObject continueButton;
 
         [SerializeField] protected OptionView optionViewPrefab;
+
+        [SerializeField] protected CanvasGroup canvasGroup;
         protected List<OptionView> optionViews = new List<OptionView>();
         protected Action<int> OnOptionSelected;
 
+        private void Awake()
+        {
+            canvasGroup.alpha = 0;
+            canvasGroup.blocksRaycasts = false;
+        }
+
         public override void RunLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
+            canvasGroup.alpha = 1;
+            canvasGroup.blocksRaycasts = true;
             Debug.Log("Running line - " + dialogueLine.Text.Text);
             lineText.text = dialogueLine.Text.Text;
             //onDialogueLineFinished?.Invoke();
@@ -114,6 +124,8 @@ namespace Conversation.UI
             {
                 optionView.gameObject.SetActive(false);
             }
+            canvasGroup.alpha = 0;
+            canvasGroup.blocksRaycasts = false;
         }
 
         public void OnContinueClicked()

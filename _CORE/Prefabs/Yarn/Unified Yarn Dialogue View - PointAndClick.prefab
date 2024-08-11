@@ -638,3 +638,4 @@ MonoBehaviour:
   lineText: {fileID: 3632247626633086428}
   continueButton: {fileID: 3632247626707669574}
   optionViewPrefab: {fileID: 5665317717604146022, guid: 2b8d26623504a9746917f3170f354cf5, type: 3}
+  canvasGroup: {fileID: 5824849751557654635}
