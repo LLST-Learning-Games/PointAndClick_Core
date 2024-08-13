@@ -25,10 +25,19 @@ namespace Conversation.UI
             canvasGroup.blocksRaycasts = false;
         }
 
-        public override void RunLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
+        public override void DialogueStarted()
         {
             canvasGroup.alpha = 1;
             canvasGroup.blocksRaycasts = true;
+        }
+
+        public override void RunLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
+        {
+            DisplayNextLine(dialogueLine,onDialogueLineFinished);
+        }
+
+        private void DisplayNextLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
+        {
             Debug.Log("Running line - " + dialogueLine.Text.Text);
             lineText.text = dialogueLine.Text.Text;
             //onDialogueLineFinished?.Invoke();
