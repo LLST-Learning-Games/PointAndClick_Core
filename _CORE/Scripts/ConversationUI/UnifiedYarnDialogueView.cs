@@ -45,6 +45,8 @@ namespace Conversation.UI
 
         public override void RunOptions(DialogueOption[] dialogueOptions, Action<int> onOptionSelected)
         {
+            continueButton.SetActive(false);
+
             Debug.Log("Running options...");
             // If we don't already have enough option views, create more
             while (dialogueOptions.Length > optionViews.Count)
@@ -113,6 +115,7 @@ namespace Conversation.UI
             /// </summary>
             void OptionViewWasSelected(DialogueOption option)
             {
+                continueButton.SetActive(true);
 
                 Debug.Log("Selected option " + option.Line.Text.Text);
                 foreach (var optionView in optionViews)
