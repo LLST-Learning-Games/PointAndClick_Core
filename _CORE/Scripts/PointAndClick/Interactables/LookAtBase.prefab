@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4525802412173224479}
   - component: {fileID: 9061790337113382512}
   - component: {fileID: 1276876422143676525}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: LookAtBase
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39dc4021a8884d4489b284c62af5c42b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _lookAtKey: General Store
 --- !u!58 &1276876422143676525
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -60,4 +61,4 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.2
