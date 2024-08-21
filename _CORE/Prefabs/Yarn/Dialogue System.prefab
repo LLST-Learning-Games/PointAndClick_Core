@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3579681405068720530}
   - component: {fileID: 3831113771892455813}
   m_Layer: 0
-  m_Name: Dialogue System - PointAndClick_Version
+  m_Name: Dialogue System
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
