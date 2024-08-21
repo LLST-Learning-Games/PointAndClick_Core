@@ -12,6 +12,7 @@ public class ConversationInteractableBridge : BaseInteractableBridge
     [SerializeField] private string _conversationId = "Start";
 
     private UnityAction _onDialogueComplete;
+
     private void Start()
     {
         if (_dialogueRunner is null)
