@@ -12,7 +12,11 @@ namespace SceneManagement
 
         private void Start()
         {
-            CheckForOtherPersistentObjects();
+            if (CheckForOtherPersistentObjects())
+            {
+                Destroy(this.gameObject);
+                return;
+            }
 
             if (!_persistentObjectSpawned)
             {
@@ -25,14 +29,15 @@ namespace SceneManagement
             }
         }
 
-        private void CheckForOtherPersistentObjects()
+        private bool CheckForOtherPersistentObjects()
         {
             var persistentObjects = FindObjectOfType<GeneratePersistentObject>();
 
-            if( persistentObjects)
+            if(persistentObjects != this)
             {
-                Destroy(this);
+                return true;   
             }
+            return false;
         }
     }
 }
