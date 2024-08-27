@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Inventory
 {
-    public class InventorySystem : MonoBehaviour
+    public class InventorySystem : GameSystem
     {
         private Dictionary<string, InventoryItem> _inventory = new();
         public IReadOnlyDictionary<string, InventoryItem> Inventory => _inventory;

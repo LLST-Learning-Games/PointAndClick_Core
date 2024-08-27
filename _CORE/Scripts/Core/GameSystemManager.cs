@@ -3,10 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class SystemManager : MonoBehaviour
+public class GameSystemManager : MonoBehaviour
 {
-    [SerializeField] private List<GameSystem> _monoSystems;
-    private Dictionary<string, GameSystem> _systems;
+    [SerializeField] private List<GameSystem> _monoSystems = new();
+    private Dictionary<string, GameSystem> _systems = new();
+
+    [ContextMenu("FindGameSystems")]
+    [ExecuteInEditMode]
+    private void FindSystemsInScene()
+    {
+        _monoSystems.Clear();
+        var systems = FindObjectsOfType<GameSystem>();
+        _monoSystems.AddRange(systems);
+    }
 
     private void Awake()
     {

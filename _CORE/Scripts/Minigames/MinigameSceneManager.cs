@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class MinigameSceneManager : MonoBehaviour
+public class MinigameSceneManager : GameSystem
 {
     public bool IsMinigameLoaded { get; private set; }
 

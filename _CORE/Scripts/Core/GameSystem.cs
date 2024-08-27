@@ -6,5 +6,6 @@ using UnityEngine;
 [Serializable]
 public abstract class GameSystem : MonoBehaviour
 {
-    public abstract string GetId();
+    [SerializeField] protected string _systemId;
+    public string GetId() => _systemId;
 }

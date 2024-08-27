@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class WorldResourceManager : MonoBehaviour
+public class WorldResourceManager : GameSystem
 {
     [SerializeField] private List<WorldResource> _resources = new List<WorldResource>();
     
