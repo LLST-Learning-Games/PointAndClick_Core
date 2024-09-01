@@ -3,43 +3,61 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class GameSystemManager : MonoBehaviour
+namespace SystemManagement
 {
-    [SerializeField] private List<GameSystem> _monoSystems = new();
-    private Dictionary<string, GameSystem> _systems = new();
 
-    [ContextMenu("FindGameSystems")]
-    [ExecuteInEditMode]
-    private void FindSystemsInScene()
+    public class GameSystemManager : MonoBehaviour
     {
-        _monoSystems.Clear();
-        var systems = FindObjectsOfType<GameSystem>();
-        _monoSystems.AddRange(systems);
-    }
+        // The system manager is our one and only singleton
+        public static GameSystemManager Instance;
 
-    private void Awake()
-    {
-        foreach (var system in _monoSystems) 
+        [SerializeField] private List<GameSystem> _monoSystems = new();
+        private Dictionary<string, GameSystem> _systems = new();
+
+        [ContextMenu("FindGameSystems")]
+        [ExecuteInEditMode]
+        private void FindSystemsInScene()
         {
-            _systems.Add(system.GetId(), system);
+            _monoSystems.Clear();
+            var systems = FindObjectsOfType<GameSystem>();
+            _monoSystems.AddRange(systems);
         }
 
-    }
-
-    public T GetSystem<T>(string id) where T : GameSystem
-    {
-        if (_systems.TryGetValue(id, out var system) && system is T typedSystem)
+        private void Awake()
         {
-            return typedSystem;
+            if (Instance is null)
+            {
+                Instance = this;
+            }
+
+            if (Instance != this)
+            {
+                DestroyImmediate(this);
+                return;
+            }
+
+            foreach (var system in _monoSystems)
+            {
+                _systems.Add(system.GetId(), system);
+            }
+
         }
 
-        throw new GameSystemException($"[{GetType().Name}] Could not find system with id {id}");
-    }
-}
+        public T GetSystem<T>(string id) where T : GameSystem
+        {
+            if (_systems.TryGetValue(id, out var system) && system is T typedSystem)
+            {
+                return typedSystem;
+            }
 
-public class GameSystemException : System.Exception
-{
-    public GameSystemException(string message) : base(message)
+            throw new GameSystemException($"[{GetType().Name}] Could not find system with id {id}");
+        }
+    }
+
+    public class GameSystemException : System.Exception
     {
+        public GameSystemException(string message) : base(message)
+        {
+        }
     }
 }

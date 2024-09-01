@@ -2,6 +2,7 @@ using UnityEngine;
 using Pathfinding;
 using UnityEngine.EventSystems;
 using PointAndClick.Interactable;
+using PointAndClick.Conversation;
 
 namespace PointAndClick.Player {
 	public class PlayerInput : MonoBehaviour {
@@ -54,10 +55,10 @@ namespace PointAndClick.Player {
 
             Vector3 newPosition = _cam.ScreenToWorldPoint(Input.mousePosition);
             newPosition.z = _cam.transform.position.z;
-
+            
             var hit = Physics2D.Raycast(newPosition, Vector2.zero);
 
-            switch(inputType)
+            switch (inputType)
             {
                 case PlayerInputType.Interact:
                     HandleInteractInput(newPosition, hit);
