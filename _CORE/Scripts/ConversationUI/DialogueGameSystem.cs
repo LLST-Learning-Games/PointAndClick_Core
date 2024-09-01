@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using Yarn.Unity;
 
-public class DialogueGameSystem : GameSystem
+namespace Conversation
 {
-    [SerializeField] private DialogueRunner _dialogueRunner;
-
-    public DialogueRunner GetDialogueRunner() => _dialogueRunner;
-
-    private void Reset()
+    public class DialogueGameSystem : GameSystem
     {
-         FindDialogueRunner();
-    }
+        [SerializeField] private DialogueRunner _dialogueRunner;
 
-    [ContextMenu("Find Dialogue Runner")]
-    [ExecuteInEditMode]
-    private void FindDialogueRunner()
-    {
-        _dialogueRunner = gameObject.GetComponent<DialogueRunner>();
+        public DialogueRunner GetDialogueRunner() => _dialogueRunner;
+
+        private void Reset()
+        {
+             FindDialogueRunner();
+        }
+
+        [ContextMenu("Find Dialogue Runner")]
+        [ExecuteInEditMode] 
+        private void FindDialogueRunner()
+        {
+            _dialogueRunner = gameObject.GetComponent<DialogueRunner>();
+        }
     }
 }
