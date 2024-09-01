@@ -13,5 +13,10 @@ namespace Inventory.UI
             _item = item;
             _image.sprite = _item.InventorySprite;
         }
+
+        public void OnClick()
+        {
+            Debug.Log($"[{GetType().Name}] You clicked on a {_item.Name}");
+        }
     }
 }
