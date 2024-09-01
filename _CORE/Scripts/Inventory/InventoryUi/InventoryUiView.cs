@@ -5,9 +5,9 @@ namespace Inventory.UI
 {
     public class InventoryUiView : MonoBehaviour
     {
-        [SerializeField] InventorySystem _inventorySystem;
-        [SerializeField] Transform _itemGrid;
-        [SerializeField] InventoryUiElement _inventoryItemPrefab;
+        [SerializeField] private InventorySystem _inventorySystem;
+        [SerializeField] private Transform _itemGrid;
+        [SerializeField] private InventoryUiElement _inventoryItemPrefab;
 
         private List<InventoryUiElement> _uiElements = new();
 
@@ -21,8 +21,12 @@ namespace Inventory.UI
 
         public void Initialize()
         {
-            ClearInventoryUi();
-            InitializeInventoryUi();
+            if(_inventorySystem.IsDirty)
+            {
+                ClearInventoryUi();
+                InitializeInventoryUi();
+                _inventorySystem.IsDirty = false;
+            }
         }
 
         private void InitializeInventoryUi()
@@ -31,15 +35,15 @@ namespace Inventory.UI
             {
                 var inventoryItem = Instantiate(_inventoryItemPrefab, _itemGrid);
                 inventoryItem.Initialize(item);
+                _uiElements.Add(inventoryItem);
             }
         }
 
         private void ClearInventoryUi()
         {
-
             foreach (var uiElement in _uiElements)
             {
-                Destroy(uiElement);
+                Destroy(uiElement.gameObject);
             }
             _uiElements.Clear();
         }
