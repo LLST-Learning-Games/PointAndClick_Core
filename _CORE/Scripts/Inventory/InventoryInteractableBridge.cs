@@ -7,7 +7,7 @@ namespace Inventory
     internal class InventoryInteractableBridge : BaseInteractableBridge
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
-        [SerializeField] private InventoryItem _item;
+        [SerializeField] private InventoryItemModel _item;
         [SerializeField] private InventorySystem _inventory;
 
         [ExecuteInEditMode]

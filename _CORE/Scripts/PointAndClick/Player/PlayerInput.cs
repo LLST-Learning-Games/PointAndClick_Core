@@ -3,6 +3,9 @@ using Pathfinding;
 using UnityEngine.EventSystems;
 using PointAndClick.Interactable;
 using PointAndClick.Conversation;
+using SystemManagement;
+using Inventory;
+using System;
 
 namespace PointAndClick.Player {
 	public class PlayerInput : MonoBehaviour {
@@ -12,27 +15,46 @@ namespace PointAndClick.Player {
         private Camera _cam;
 		private InteractableController _currentInteractable;
 
+        // todo - move this to a subcomponent
+        private InventorySystem _inventorySystem;
 
         public void Start () {
 			_cam = Camera.main;
+            _inventorySystem = GameSystemManager.Instance.GetSystem<InventorySystem>("Inventory");
 		}
-
 
 		void Update ()
         {
             var InputType = GetInputType();
             HandleInput(InputType);
+            HandleInventoryCursor();
+        }
+
+        private void HandleInventoryCursor()
+        {
+            if (_inventorySystem.IsItemSelected)
+            {
+                _inventorySystem.UpdateCursor(Input.mousePosition);
+            }
         }
 
         private PlayerInputType GetInputType()
         {
             if (Input.GetMouseButtonDown(0))
             {
+                if (_inventorySystem.IsItemSelected)
+                {
+                    return PlayerInputType.Inventory;
+                }
                 return PlayerInputType.Interact;
             }
 
             if (Input.GetMouseButtonDown(1))
             {
+                if (_inventorySystem.IsItemSelected)
+                {
+                    _inventorySystem.DeselectItem();
+                }
                 return PlayerInputType.LookAt;
             }
 
@@ -114,6 +136,7 @@ namespace PointAndClick.Player {
         private void HandleInventoryInput(RaycastHit2D hit)
         {
             Debug.Log($"[{GetType().Name}] Todo - use inventory item on stuff");
+            _inventorySystem.DeselectItem();
         }
 
         private void CancelInteraction()
