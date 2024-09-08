@@ -13,6 +13,7 @@ namespace PointAndClick.Player
         [SerializeField] private float _furthestY = 0.0f;
 
         private Vector3 _lastPos = Vector3.zero;
+        private Vector3 _originalScale = Vector3.zero;
 
         private void Awake()
         {
@@ -20,7 +21,8 @@ namespace PointAndClick.Player
             {
                 var player = (PlayerInput)FindAnyObjectByType(typeof(PlayerInput));
                 _objectToScale = player.transform;
-            }    
+            }
+            _originalScale = _objectToScale.transform.localScale;
         }
 
         void Update()
@@ -32,7 +34,7 @@ namespace PointAndClick.Player
                 var rawScale = (yPos - _furthestY) / (_closestY - _furthestY);
                 
                 var scale = rawScale * (_maximumScale - _minimumScale) + _minimumScale;
-                _objectToScale.localScale = new Vector3(scale, scale, scale);
+                _objectToScale.localScale = scale * _originalScale;
 
                 _lastPos = _objectToScale.position;
 
