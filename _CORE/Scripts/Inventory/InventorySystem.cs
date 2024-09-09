@@ -17,7 +17,8 @@ namespace Inventory
 
         private InventoryItemController _selectedItem;
         public bool IsItemSelected => _selectedItem != null;
-        public InventoryItemController SelectedItem {  get { return _selectedItem; } }  
+        public InventoryItemController SelectedItem { get { return _selectedItem; } }
+        [SerializeField] private bool _verboseLogging;
 
 
         public void AddItem(InventoryItemModel item)

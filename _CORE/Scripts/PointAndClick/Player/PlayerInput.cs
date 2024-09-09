@@ -6,14 +6,17 @@ using PointAndClick.Conversation;
 using SystemManagement;
 using Inventory;
 using System;
+using System.Collections.Generic;
 
 namespace PointAndClick.Player {
 	public class PlayerInput : MonoBehaviour {
-        [SerializeField] private Transform _movementTarget;
+        [SerializeField] private Transform _movementTargetPrefab;
+        [SerializeField] private AIDestinationSetter _destinationSetter;
 		[SerializeField] private AILerp _playerAi;
 
         private Camera _cam;
 		private InteractableController _currentInteractable;
+        private Transform _movementTarget;
 
         // todo - move this to a subcomponent
         private InventorySystem _inventorySystem;
@@ -21,6 +24,8 @@ namespace PointAndClick.Player {
         public void Start () {
 			_cam = Camera.main;
             _inventorySystem = GameSystemManager.Instance.GetSystem<InventorySystem>("Inventory");
+            _movementTarget = Instantiate(_movementTargetPrefab, transform.root);
+            _destinationSetter.target = _movementTarget;
 		}
 
 		void Update ()
@@ -163,7 +168,7 @@ namespace PointAndClick.Player {
 
             newPosition.z = 0f;
             if (newPosition != _movementTarget.position) {
-				_movementTarget.position = newPosition;
+                _movementTarget.position = newPosition;
                 _playerAi.SearchPath();
 			}
 		}
