@@ -10,7 +10,7 @@ namespace SceneManagement
         [SerializeField] private GameObject _persistentObjectSpawned;
         [SerializeField] private string _sceneName;
 
-        private void Start()
+        private void Awake()
         {
             if (CheckForOtherPersistentObjects())
             {
@@ -31,11 +31,14 @@ namespace SceneManagement
 
         private bool CheckForOtherPersistentObjects()
         {
-            var persistentObjects = FindObjectOfType<GeneratePersistentObject>();
+            var persistentObjects = FindObjectsOfType<GeneratePersistentObject>();
 
-            if(persistentObjects != this)
+            foreach (var persistentObject in persistentObjects)
             {
-                return true;   
+                if (persistentObject != this)
+                {
+                    return true;
+                }
             }
             return false;
         }

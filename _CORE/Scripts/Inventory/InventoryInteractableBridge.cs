@@ -8,7 +8,7 @@ namespace Inventory
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private InventoryItemModel _item;
-        [SerializeField] private InventorySystem _inventory;
+        private InventorySystem _inventory;
 
         [ExecuteInEditMode]
         [ContextMenu("Update Sprite")]
@@ -27,16 +27,9 @@ namespace Inventory
             SetSprite();
         }
 
-        private void Start()
-        {
-            if (!_inventory)
-            {
-                _inventory = FindFirstObjectByType<InventorySystem>();
-            }
-        }
-
         public override void OnInteractionExecute()
         {
+            _inventory = FindFirstObjectByType<InventorySystem>();
             _inventory.AddItem(_item);
             Destroy(this.gameObject);
         }
