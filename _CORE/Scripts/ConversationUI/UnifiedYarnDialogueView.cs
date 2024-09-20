@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using Yarn.Unity;
 
 namespace Conversation.UI
@@ -16,6 +17,8 @@ namespace Conversation.UI
         [SerializeField] protected OptionView optionViewPrefab;
 
         [SerializeField] protected CanvasGroup canvasGroup;
+        [SerializeField] protected UnityEvent _onDialogueStarted;
+
         protected List<OptionView> optionViews = new List<OptionView>();
         protected Action<int> OnOptionSelected;
 
@@ -29,6 +32,7 @@ namespace Conversation.UI
         {
             canvasGroup.alpha = 1;
             canvasGroup.blocksRaycasts = true;
+            _onDialogueStarted?.Invoke();
         }
 
         public override void RunLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
