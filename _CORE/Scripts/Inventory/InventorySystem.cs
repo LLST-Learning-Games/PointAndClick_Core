@@ -16,8 +16,11 @@ namespace Inventory
         public bool IsDirty { get; internal set; } = true;
 
         private InventoryItemController _selectedItem;
+        private InventoryItemController _queuedForUseItem;
         public bool IsItemSelected => _selectedItem != null;
+        public bool IsItemQueued => _queuedForUseItem != null;
         public InventoryItemController SelectedItem { get { return _selectedItem; } }
+        public InventoryItemController QueuedForUseItem { get { return _queuedForUseItem; } }
         [SerializeField] private bool _verboseLogging;
 
 
@@ -35,6 +38,9 @@ namespace Inventory
             _cursor.sprite = _selectedItem.ItemModel.InventorySprite;
             _cursor.gameObject.SetActive(true);
         }
+
+        public void QueueSelectedItemForUse() => _queuedForUseItem = _selectedItem;
+        public void ClearQueuedItem() => _queuedForUseItem = null;
 
         internal void DeselectItem()
         {

@@ -1,4 +1,5 @@
 ﻿using PointAndClick.Interactables;
+using SystemManagement;
 using UnityEngine;
 
 namespace Inventory
@@ -7,7 +8,6 @@ namespace Inventory
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private InventoryItemModel _item;
-        private InventorySystem _inventory;
 
         [ExecuteInEditMode]
         [ContextMenu("Update Sprite")]
@@ -28,8 +28,8 @@ namespace Inventory
 
         public override void OnInteractionExecute()
         {
-            _inventory = FindFirstObjectByType<InventorySystem>();
-            _inventory.AddItem(_item);
+            var inventory = GameSystemManager.Instance.GetSystem<InventorySystem>("Inventory");
+            inventory?.AddItem(_item);
             Destroy(this.gameObject);
         }
     }

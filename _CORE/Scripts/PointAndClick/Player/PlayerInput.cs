@@ -45,10 +45,13 @@ namespace PointAndClick.Player {
 
         private PlayerInputType GetInputType()
         {
+
             if (Input.GetMouseButtonDown(0))
             {
+                //_inventorySystem.ClearQueuedItem();
                 if (_inventorySystem.IsItemSelected)
                 {
+                    _inventorySystem.QueueSelectedItemForUse();
                     return PlayerInputType.Inventory;
                 }
                 return PlayerInputType.Interact;
@@ -56,6 +59,7 @@ namespace PointAndClick.Player {
 
             if (Input.GetMouseButtonDown(1))
             {
+                //_inventorySystem.ClearQueuedItem();
                 if (_inventorySystem.IsItemSelected)
                 {
                     _inventorySystem.DeselectItem();
