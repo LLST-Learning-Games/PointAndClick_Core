@@ -66,25 +66,25 @@ namespace PointAndClick.Player {
             return PlayerInputType.NoInput;
         }
 
-        private void HandleInput(PlayerInputType inputType) 
+        private void HandleInput(PlayerInputType inputType)
         {
-            if(inputType == PlayerInputType.NoInput)
+            if (CheckForEarlyExits(inputType))
             {
                 return;
             }
 
-            if (PlayerInputLock.IsPlayerInputLocked  // block input if minigame is loaded - todo - probably should exit if we're clicking off the UI
-                || EventSystem.current.IsPointerOverGameObject()    // early exit if over UI
-                )
+            GetClickMetrics(out Vector3 newPosition, out RaycastHit2D hit);
+
+            var foundInteractable = HandleInteractableHit(inputType, hit);
+
+            if (!foundInteractable && inputType != PlayerInputType.LookAt)
             {
-                return;
+                HandleWalkToHit(newPosition, hit);
             }
+        }
 
-            Vector3 newPosition = _cam.ScreenToWorldPoint(Input.mousePosition);
-            newPosition.z = _cam.transform.position.z;
-            
-            var hit = Physics2D.Raycast(newPosition, Vector2.zero);
-
+        private bool HandleInteractableHit(PlayerInputType inputType, RaycastHit2D hit)
+        {
             if (hit && hit.collider.gameObject.layer == 6)
             {
                 _currentInteractable = hit.collider.gameObject.GetComponent<InteractableController>();
@@ -95,7 +95,7 @@ namespace PointAndClick.Player {
                     _inventorySystem.DeselectItem();
                 }
 
-                if (inputType != PlayerInputType.LookAt && 
+                if (inputType != PlayerInputType.LookAt &&
                     Vector3.Distance(_currentInteractable.WalkToPosition, transform.position) > Mathf.Epsilon)
                 {
                     UpdateTargetPosition(_currentInteractable.WalkToPosition);
@@ -105,19 +105,47 @@ namespace PointAndClick.Player {
                 {
                     OnDestinationReached();
                 }
-                return;
+                return true;
             }
+            return false;
+        }
 
+        private void HandleWalkToHit(Vector3 newPosition, RaycastHit2D hit)
+        {
             if (!hit || hit && hit.collider.gameObject.layer == 3)
             {
                 CancelInteraction();
 
                 UpdateTargetPosition(newPosition);
             }
-
         }
 
- 
+
+        private void GetClickMetrics(out Vector3 newPosition, out RaycastHit2D hit)
+        {
+            newPosition = _cam.ScreenToWorldPoint(Input.mousePosition);
+            newPosition.z = _cam.transform.position.z;
+
+            hit = Physics2D.Raycast(newPosition, Vector2.zero);
+        }
+
+        private bool CheckForEarlyExits(PlayerInputType inputType)
+        {
+            if (inputType == PlayerInputType.NoInput)
+            {
+                return true;
+            }
+
+            if (PlayerInputLock.IsPlayerInputLocked  // block input if minigame is loaded - todo - probably should exit if we're clicking off the UI
+                || EventSystem.current.IsPointerOverGameObject()    // early exit if over UI
+                )
+            {
+                return true;
+            }
+
+            return false;
+        }
+
 
         private void CancelInteraction()
         {

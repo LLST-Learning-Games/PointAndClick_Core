@@ -250,7 +250,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _highlightedSpriteRenderer: {fileID: 394685342778050225}
   _walkToPosition: {fileID: 5577776395029742059}
-  _interactableBridge: {fileID: 2648018143389972204}
+  _typeRelationships:
+  - InputType: 10
+    Interactable: {fileID: 2648018143389972204}
 --- !u!114 &2648018143389972204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -265,7 +267,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spriteRenderer: {fileID: 4979304780743832403}
   _item: {fileID: 11400000, guid: 358768eb3721e3e41a1892e77d0e8343, type: 2}
-  _inventory: {fileID: 0}
 --- !u!58 &1049565933449186770
 CircleCollider2D:
   m_ObjectHideFlags: 0
