@@ -1,3 +1,4 @@
+using Conversation;
 using PointAndClick.Interactables;
 using SystemManagement;
 using UnityEngine;
@@ -23,7 +24,7 @@ namespace PointAndClick.Conversation
         [ContextMenu("Find Dialogue Runner")]
         protected virtual void FindDialogueRunner()
         {
-            _dialogueRunner = FindFirstObjectByType<DialogueRunner>();
+            _dialogueRunner = GameSystemManager.Instance.GetSystem<DialogueGameSystem>(_dialogueSystemId)?.GetDialogueRunner();
         }
         protected virtual void Reset()
         {

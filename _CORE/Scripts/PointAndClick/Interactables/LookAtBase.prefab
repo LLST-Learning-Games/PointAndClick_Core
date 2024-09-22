@@ -45,7 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39dc4021a8884d4489b284c62af5c42b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _lookAtKey: General Store
+  _dialogueRunner: {fileID: 0}
+  _dialogueSystemId: Bark
+  _dialogueKey: 
 --- !u!58 &1276876422143676525
 CircleCollider2D:
   m_ObjectHideFlags: 0
