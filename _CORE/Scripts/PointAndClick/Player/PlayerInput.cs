@@ -85,28 +85,18 @@ namespace PointAndClick.Player {
             
             var hit = Physics2D.Raycast(newPosition, Vector2.zero);
 
-            switch (inputType)
-            {
-                case PlayerInputType.Interact:
-                    HandleInteractInput(newPosition, hit);
-                    break;
-                case PlayerInputType.LookAt:
-                    HandleLookInput(hit);
-                    break;
-                case PlayerInputType.Inventory:
-                    HandleInventoryInput(hit);
-                    break;
-            }
-        }
-
-        private void HandleInteractInput(Vector3 newPosition, RaycastHit2D hit)
-        {
             if (hit && hit.collider.gameObject.layer == 6)
             {
                 _currentInteractable = hit.collider.gameObject.GetComponent<InteractableController>();
-                _currentInteractable.OnInteractionBegin();
+                _currentInteractable.OnInteractionBegin(inputType);
 
-                if (Vector3.Distance(_currentInteractable.WalkToPosition, transform.position) > Mathf.Epsilon)
+                if (_inventorySystem.IsItemSelected)
+                {
+                    _inventorySystem.DeselectItem();
+                }
+
+                if (inputType != PlayerInputType.LookAt && 
+                    Vector3.Distance(_currentInteractable.WalkToPosition, transform.position) > Mathf.Epsilon)
                 {
                     UpdateTargetPosition(_currentInteractable.WalkToPosition);
                     _playerAi.OnDestinationReached += OnDestinationReached;
@@ -124,25 +114,10 @@ namespace PointAndClick.Player {
 
                 UpdateTargetPosition(newPosition);
             }
+
         }
 
-        private void HandleLookInput(RaycastHit2D hit)
-        {
-            if (hit && hit.collider.gameObject.layer == 6)
-            {
-                var lookAtTarget = hit.collider.gameObject.GetComponent<LookAtInteractableBridge>();
-                lookAtTarget?.OnInteractionExecute();
-                return;
-            }
-
-            Debug.Log($"[{GetType().Name}] You don't see anything.");
-        }
-
-        private void HandleInventoryInput(RaycastHit2D hit)
-        {
-            Debug.Log($"[{GetType().Name}] Todo - use inventory item on stuff");
-            _inventorySystem.DeselectItem();
-        }
+ 
 
         private void CancelInteraction()
         {
