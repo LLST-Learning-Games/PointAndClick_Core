@@ -21,11 +21,11 @@ namespace PointAndClick.Conversation
             }
         }
 
-        [ContextMenu("Find Dialogue Runner")]
         protected virtual void FindDialogueRunner()
         {
             _dialogueRunner = GameSystemManager.Instance.GetSystem<DialogueGameSystem>(_dialogueSystemId)?.GetDialogueRunner();
         }
+
         protected virtual void Reset()
         {
             FindDialogueRunner();
@@ -33,9 +33,12 @@ namespace PointAndClick.Conversation
 
         public override void OnInteractionExecute()
         {
-            _dialogueRunner.StartDialogue(_dialogueKey);
+            StartDialogueByKey(_dialogueKey);
         }
 
-
+        public void StartDialogueByKey(string key)
+        {
+            _dialogueRunner.StartDialogue(key);
+        }
     }
 }

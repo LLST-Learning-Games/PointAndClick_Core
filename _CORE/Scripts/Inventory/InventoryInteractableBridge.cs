@@ -1,5 +1,4 @@
 ﻿using PointAndClick.Interactables;
-using System;
 using UnityEngine;
 
 namespace Inventory
