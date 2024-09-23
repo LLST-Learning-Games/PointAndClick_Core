@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,12 +14,24 @@ namespace Persistence
 
         private void Awake()
         {
-            SceneManager.activeSceneChanged += OnSceneChanged;
+            _currentSceneDictionary = new ScenePersistenceDictionary();
+            _persistence.Add(SceneManager.GetActiveScene().name, _currentSceneDictionary);
+        }
+        private void Start()
+        {
+            Debug.Log($"[{GetType().Name}] Registering listeners");
+            SceneManager.sceneLoaded += OnSceneChanged;
+            SceneManager.sceneUnloaded += CacheSceneNameOnUnload;
         }
 
-        private void OnSceneChanged(Scene previousScene, Scene newScene)
+        private void CacheSceneNameOnUnload(Scene lastScene)
         {
-            Debug.Log($"[{GetType().Name}] Detected scene change from {previousScene.name} to {newScene.name}");
+            LastSceneName = lastScene.name;
+        }
+
+        private void OnSceneChanged(Scene newScene, LoadSceneMode _)
+        {
+            Debug.Log($"[{GetType().Name}] Detected scene change from {LastSceneName} to {newScene.name}");
             if (!_persistence.ContainsKey(newScene.name)) 
             {
                 _persistence.Add(newScene.name, new ScenePersistenceDictionary());
@@ -26,8 +39,6 @@ namespace Persistence
             }
 
             _currentSceneDictionary = _persistence[newScene.name];
-
-            LastSceneName = previousScene.name;
         }
 
         public bool TryGetPersistentObject<T>(string key, out T value)
@@ -60,7 +71,9 @@ namespace Persistence
 
         private void OnDestroy()
         {
-            SceneManager.activeSceneChanged -= OnSceneChanged;
+            Debug.Log($"[{GetType().Name}] De-registering listeners");
+            SceneManager.sceneLoaded -= OnSceneChanged;
+            SceneManager.sceneUnloaded -= CacheSceneNameOnUnload;
         }
     }
 }

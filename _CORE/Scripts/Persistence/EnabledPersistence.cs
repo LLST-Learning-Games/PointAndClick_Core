@@ -25,11 +25,5 @@ namespace Persistence
         {
             _persistenceSystem.RegisterPersistentObject(_key, state);
         }
-
-        public void OnDisable()
-        {
-            RegisterActiveState(false);
-        }
-
     }
 }

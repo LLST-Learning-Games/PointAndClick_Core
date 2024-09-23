@@ -1,4 +1,5 @@
-﻿using PointAndClick.Interactables;
+﻿using Persistence;
+using PointAndClick.Interactables;
 using SystemManagement;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace Inventory
     {
         [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private InventoryItemModel _item;
+        [SerializeField] private EnabledPersistence _enabledPersistence;
 
         [ExecuteInEditMode]
         [ContextMenu("Update Sprite")]
@@ -30,6 +32,7 @@ namespace Inventory
         {
             var inventory = GameSystemManager.Instance.GetSystem<InventorySystem>("Inventory");
             inventory?.AddItem(_item);
+            _enabledPersistence?.RegisterActiveState(false);
             Destroy(this.gameObject);
         }
     }
