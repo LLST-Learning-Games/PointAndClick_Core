@@ -211,6 +211,7 @@ GameObject:
   - component: {fileID: 4558256985963529279}
   - component: {fileID: 2648018143389972204}
   - component: {fileID: 1049565933449186770}
+  - component: {fileID: 5647277862973659079}
   m_Layer: 6
   m_Name: InventoryInteractable
   m_TagString: Untagged
@@ -267,6 +268,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _spriteRenderer: {fileID: 4979304780743832403}
   _item: {fileID: 11400000, guid: 358768eb3721e3e41a1892e77d0e8343, type: 2}
+  _enabledPersistence: {fileID: 5647277862973659079}
 --- !u!58 &1049565933449186770
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -283,3 +285,15 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.2
+--- !u!114 &5647277862973659079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7698431616299829439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d360dc018326bc440987fcf182304a21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
