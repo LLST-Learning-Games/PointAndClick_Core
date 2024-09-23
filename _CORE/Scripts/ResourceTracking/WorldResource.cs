@@ -14,7 +14,10 @@ public class WorldResource : MonoBehaviour
     {
         _currentResource = Mathf.Clamp01(_currentResource);
         _currentResource -= _resourceBurnRate * Time.deltaTime;
-        _resourceSlider.value = _currentResource;
+        if (_resourceSlider)
+        {
+            _resourceSlider.value = _currentResource;
+        }
     }
 
     public void AddResource(float addAmount)
