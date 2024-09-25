@@ -13,6 +13,9 @@ namespace PointAndClick.Conversation
         [SerializeField] protected string _dialogueSystemId = "Dialogue";
         [SerializeField] protected string _dialogueKey;
 
+       
+        public void SetDialogueKey(string dialogueKey) => _dialogueKey = dialogueKey;
+
         protected virtual void Start()
         {
             if (_dialogueRunner is null)
@@ -38,6 +41,10 @@ namespace PointAndClick.Conversation
 
         public void StartDialogueByKey(string key)
         {
+            if (_dialogueRunner.IsDialogueRunning)
+            {
+                _dialogueRunner.Stop();
+            }
             _dialogueRunner.StartDialogue(key);
         }
     }

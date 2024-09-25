@@ -1,4 +1,5 @@
 ﻿using Persistence;
+using PointAndClick.Conversation;
 using PointAndClick.Interactables;
 using SystemManagement;
 using UnityEngine;
@@ -23,9 +24,20 @@ namespace Inventory
             _spriteRenderer.sprite = _item.EnvironmentSprite;
         }
 
+        [ExecuteInEditMode]
+        [ContextMenu("Set LookAt")]
+        private void SetLookat()
+        {
+            var lookAtInteractable = GetComponent<LookAtInteractableBridge>();
+            lookAtInteractable.SetDialogueKey(_item.Description);
+
+        }
+
+        [ExecuteInEditMode]
         private void Reset()
         {
             SetSprite();
+            SetLookat();
         }
 
         public override void OnInteractionExecute()

@@ -10,7 +10,7 @@ namespace Inventory
     {
         [SerializeField] private List<UseInventoryOnRelationship> _inventoryItemRelationships;
         [SerializeField] private UnityEvent _fallbackAction;
-        private readonly Dictionary<string, UseInventoryOnRelationship> _relationships = new();
+        private readonly Dictionary<string, List<UseInventoryOnRelationship>> _relationships = new();
         private InventorySystem _inventory;
 
 
@@ -21,7 +21,14 @@ namespace Inventory
             _relationships.Clear();
             foreach (var typeRelationship in _inventoryItemRelationships)
             {
-                _relationships.Add(typeRelationship.ItemId, typeRelationship);
+                List<UseInventoryOnRelationship> relationshipList;
+                if (!_relationships.TryGetValue(typeRelationship.ItemId, out relationshipList))
+                {
+                    relationshipList = new List<UseInventoryOnRelationship>();
+                    _relationships.Add(typeRelationship.ItemId, relationshipList);
+                }
+
+                relationshipList.Add(typeRelationship);
             }
         }
 
@@ -32,12 +39,15 @@ namespace Inventory
                 return;
             }
 
-            if (_relationships.TryGetValue(_inventory.QueuedForUseItem.ItemModel.Name, out var relationship))
+            if (_relationships.TryGetValue(_inventory.QueuedForUseItem.ItemModel.Name, out var relationshipList))
             {
-                relationship.Action?.Invoke();
-                if(relationship.OnActionConsumeItem)
+                foreach (var relationship in relationshipList)
                 {
-                    _inventory.RemoveItem(_inventory.QueuedForUseItem.ItemModel);
+                    relationship.Action?.Invoke();
+                    if (relationship.OnActionConsumeItem)
+                    {
+                        _inventory.RemoveItem(_inventory.QueuedForUseItem.ItemModel);
+                    }
                 }
             }
             else
