@@ -13,6 +13,7 @@ namespace Conversation.UI
     {
         private const string DIALOGUE_LOCK_KEY = "Unified_Dialogue";
 
+        [SerializeField] protected bool _shouldBlockClicks;
         [SerializeField] protected TextMeshProUGUI lineText; 
         [SerializeField] protected GameObject continueButton;
 
@@ -20,6 +21,7 @@ namespace Conversation.UI
 
         [SerializeField] protected CanvasGroup canvasGroup;
         [SerializeField] protected UnityEvent _onDialogueStarted;
+
 
         protected List<OptionView> optionViews = new List<OptionView>();
         protected Action<int> OnOptionSelected;
@@ -34,7 +36,10 @@ namespace Conversation.UI
         {
             canvasGroup.alpha = 1;
             canvasGroup.blocksRaycasts = true;
-            PlayerInputLock.RegisterLock(DIALOGUE_LOCK_KEY);
+            if (_shouldBlockClicks)
+            {
+                PlayerInputLock.RegisterLock(DIALOGUE_LOCK_KEY);
+            }
             _onDialogueStarted?.Invoke();
         }
 
@@ -136,7 +141,10 @@ namespace Conversation.UI
 
         public override void DialogueComplete()
         {
-            PlayerInputLock.ClearLock(DIALOGUE_LOCK_KEY);
+            if (_shouldBlockClicks)
+            {
+                PlayerInputLock.ClearLock(DIALOGUE_LOCK_KEY);
+            }
 
             Debug.Log("Dialogue complete");
             OnOptionSelected = null;
