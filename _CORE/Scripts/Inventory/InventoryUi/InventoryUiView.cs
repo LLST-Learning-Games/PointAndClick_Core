@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
 namespace Inventory.UI 
 {
@@ -8,6 +10,7 @@ namespace Inventory.UI
         [SerializeField] private InventorySystem _inventorySystem;
         [SerializeField] private Transform _itemGrid;
         [SerializeField] private InventoryUiElement _inventoryItemPrefab;
+        [SerializeField] private UnityEvent _onExitCallback;
 
         private List<InventoryUiElement> _uiElements = new();
 
@@ -26,6 +29,16 @@ namespace Inventory.UI
                 ClearInventoryUi();
                 InitializeInventoryUi();
                 _inventorySystem.IsDirty = false;
+            }
+        }
+
+        private void Update()
+        {
+            if((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1)) 
+                && !EventSystem.current.IsPointerOverGameObject())
+            {
+                _onExitCallback?.Invoke();
+                gameObject.SetActive(false);
             }
         }
 
