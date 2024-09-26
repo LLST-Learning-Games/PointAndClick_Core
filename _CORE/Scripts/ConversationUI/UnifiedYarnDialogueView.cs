@@ -11,6 +11,8 @@ namespace Conversation.UI
 {
     public class UnifiedYarnDialogueView : DialogueViewBase
     {
+        private const string DIALOGUE_LOCK_KEY = "Unified_Dialogue";
+
         [SerializeField] protected TextMeshProUGUI lineText; 
         [SerializeField] protected GameObject continueButton;
 
@@ -32,6 +34,7 @@ namespace Conversation.UI
         {
             canvasGroup.alpha = 1;
             canvasGroup.blocksRaycasts = true;
+            PlayerInputLock.RegisterLock(DIALOGUE_LOCK_KEY);
             _onDialogueStarted?.Invoke();
         }
 
@@ -133,6 +136,7 @@ namespace Conversation.UI
 
         public override void DialogueComplete()
         {
+            PlayerInputLock.ClearLock(DIALOGUE_LOCK_KEY);
 
             Debug.Log("Dialogue complete");
             OnOptionSelected = null;
