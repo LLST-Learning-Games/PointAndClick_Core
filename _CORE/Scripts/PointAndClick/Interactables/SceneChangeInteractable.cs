@@ -1,4 +1,5 @@
-﻿using Persistence;
+﻿using Cutscenes;
+using Persistence;
 using PointAndClick.Interactable;
 using PointAndClick.Player;
 using SystemManagement;
@@ -11,8 +12,11 @@ namespace PointAndClick.Interactables
     {
         [SerializeField] private string _sceneName;
 
+        private CutsceneControlSystem _cutsceneControl;
+
         private void Start()
         {
+            _cutsceneControl = GameSystemManager.Instance.GetSystem<CutsceneControlSystem>("CutsceneControl");
             var persistence = GameSystemManager.Instance.GetSystem<ScenePersistenceSystem>("ScenePersistence");
             if(_sceneName == persistence.LastSceneName)
             {
@@ -24,7 +28,9 @@ namespace PointAndClick.Interactables
 
         public override void OnInteractionExecute()
         {
-            SceneManager.LoadScene(_sceneName);
+            _cutsceneControl.FadeOut(() =>
+                SceneManager.LoadScene(_sceneName)
+            );
         }
     }
 }
