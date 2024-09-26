@@ -9,6 +9,15 @@ namespace Conversation
 
         public DialogueRunner GetDialogueRunner() => _dialogueRunner;
 
+        public void StartDialogue(string key) 
+        {
+            if (_dialogueRunner.IsDialogueRunning)
+            {
+                _dialogueRunner.Stop();
+            }
+            _dialogueRunner.StartDialogue(key); 
+        }
+
         private void Reset()
         {
              FindDialogueRunner();
