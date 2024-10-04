@@ -1,5 +1,5 @@
 <h1>Point and Click Core</h1>
-Portable core submodule for point and click games, written by <a href="https://matthew-r-stevens.ca/">Matthew R. Stevens</a>.
+Portable core submodule for point and click games, written by <a href="https://matthew-r-stevens.ca/" target="_blank">Matthew R. Stevens</a>.<br>
 <ul>
 <li>Features include pathfinding, dialogue, inventory system, minigame / puzzle scenes, state tracking, multiple click handling.</li>
 <li>In-progress features include animated cutscenes and saving / loading.</li>
