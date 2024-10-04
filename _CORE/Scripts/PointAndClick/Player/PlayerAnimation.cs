@@ -71,11 +71,16 @@ namespace PointAndClick.Player
 
         private void OnPathStarted()
         {
-
-
             if (!_isMoving)
             {
-                _animator.SetTrigger("StartWalk");
+                if (_is8Dir)
+                {
+                    // todo
+                }
+                else
+                {
+                    _animator.SetTrigger("StartWalk");
+                }
                 _isMoving = true;
             }
         }
@@ -86,7 +91,7 @@ namespace PointAndClick.Player
             {
                 if (_is8Dir)
                 {
-
+                    // todo
                 }
                 else
                 {
