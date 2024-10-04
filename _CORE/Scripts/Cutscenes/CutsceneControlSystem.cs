@@ -25,7 +25,14 @@ namespace Cutscenes
             SceneManager.sceneLoaded -= FadeInOnSceneLoad;
         }
 
-        private void FadeInOnSceneLoad(Scene _, LoadSceneMode __) => FadeIn();
+        private void FadeInOnSceneLoad(Scene _, LoadSceneMode mode)
+        {
+            if (mode != LoadSceneMode.Additive)
+            {
+                FadeIn();
+            }
+        }
+
 
         public void FadeIn(Action callback = null) => StartCoroutine(FadeInCoroutine(callback));
         public void FadeOut(Action callback = null) => StartCoroutine(FadeOutCoroutine(callback));
