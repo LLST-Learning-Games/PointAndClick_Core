@@ -18,7 +18,7 @@ namespace Conversation.UI
         [SerializeField] protected GameObject continueButton;
 
         [SerializeField] protected OptionView optionViewPrefab;
-
+        [SerializeField] protected Transform _optionViewContainer;
         [SerializeField] protected CanvasGroup canvasGroup;
         [SerializeField] protected UnityEvent _onDialogueStarted;
 
@@ -113,7 +113,7 @@ namespace Conversation.UI
             OptionView CreateNewOptionView()
             {
                 var optionView = Instantiate(optionViewPrefab);
-                optionView.transform.SetParent(transform, false);
+                optionView.transform.SetParent(_optionViewContainer, false);
                 optionView.transform.SetAsLastSibling();
 
                 optionView.OnOptionSelected = OptionViewWasSelected;
