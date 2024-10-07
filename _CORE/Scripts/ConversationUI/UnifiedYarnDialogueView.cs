@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using Yarn.Unity;
@@ -12,10 +13,19 @@ namespace Conversation.UI
     public class UnifiedYarnDialogueView : DialogueViewBase
     {
         private const string DIALOGUE_LOCK_KEY = "Unified_Dialogue";
+        
 
         [SerializeField] protected bool _shouldBlockClicks;
         [SerializeField] protected TextMeshProUGUI lineText; 
         [SerializeField] protected GameObject continueButton;
+
+        [SerializeField] protected bool _shouldShowDialogueHistory = true;
+        [SerializeField] protected GameObject _dialogueHistoryPrefab;
+        [SerializeField] protected Transform _dialogueContainer;
+
+        // todo - temp solution. create character objects to store this information.
+        [SerializeField] protected Color _npcHistoryColor;
+        [SerializeField] protected Color _playerHistoryColor;
 
         [SerializeField] protected OptionView optionViewPrefab;
         [SerializeField] protected Transform _optionViewContainer;
@@ -25,11 +35,13 @@ namespace Conversation.UI
 
         protected List<OptionView> optionViews = new List<OptionView>();
         protected Action<int> OnOptionSelected;
+        protected string _lastOptionTextSelected = string.Empty;
 
         private void Awake()
         {
             canvasGroup.alpha = 0;
             canvasGroup.blocksRaycasts = false;
+            lineText.text = string.Empty;
         }
 
         public override void DialogueStarted()
@@ -51,8 +63,25 @@ namespace Conversation.UI
         private void DisplayNextLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
             Debug.Log("Running line - " + dialogueLine.Text.Text);
+            if (_shouldShowDialogueHistory)
+            {
+                CreatePastDialogueRecord(lineText.text, _npcHistoryColor);
+                if (!String.IsNullOrEmpty(_lastOptionTextSelected))
+                {
+                    CreatePastDialogueRecord(_lastOptionTextSelected, _playerHistoryColor);
+                    _lastOptionTextSelected = String.Empty;
+                }
+            }
             lineText.text = dialogueLine.Text.Text;
-            //onDialogueLineFinished?.Invoke();
+        }
+
+        private void CreatePastDialogueRecord(string text, Color color)
+        {
+            var pastDialogueObject = Instantiate(_dialogueHistoryPrefab, _dialogueContainer);
+            var pastDialogueText = pastDialogueObject.GetComponent<TextMeshProUGUI>();
+            pastDialogueText.text = text;
+            pastDialogueText.color = color;
+            lineText.transform.SetAsLastSibling();
         }
 
         public override void RunOptions(DialogueOption[] dialogueOptions, Action<int> onOptionSelected)
@@ -128,6 +157,11 @@ namespace Conversation.UI
             void OptionViewWasSelected(DialogueOption option)
             {
                 continueButton.SetActive(true);
+
+                if (_shouldShowDialogueHistory) 
+                {
+                    _lastOptionTextSelected = option.Line.Text.Text;
+                }
 
                 Debug.Log("Selected option " + option.Line.Text.Text);
                 foreach (var optionView in optionViews)
