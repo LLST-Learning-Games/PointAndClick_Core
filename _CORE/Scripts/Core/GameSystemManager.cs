@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace SystemManagement
 {
@@ -12,10 +10,12 @@ namespace SystemManagement
         public static GameSystemManager Instance;
 
         [SerializeField] private List<GameSystem> _monoSystems = new();
+        [SerializeField] private Canvas _uiCanvas;
+        public Canvas UiCanvas => _uiCanvas;
+        
         private Dictionary<string, GameSystem> _systems = new();
 
         [ContextMenu("FindGameSystems")]
-        [ExecuteInEditMode]
         private void FindSystemsInScene()
         {
             _monoSystems.Clear();
@@ -32,7 +32,7 @@ namespace SystemManagement
 
             if (Instance != this)
             {
-                DestroyImmediate(this);
+                Destroy(this);
                 return;
             }
 

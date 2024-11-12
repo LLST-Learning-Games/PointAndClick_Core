@@ -11,7 +11,8 @@ namespace PointAndClick.Interactables
     public class SceneChangeInteractable : BaseInteractableBridge
     {
         [SerializeField] private string _sceneName;
-
+        [SerializeField] private bool _shouldShowUiOnNextScene = true;
+        
         private CutsceneControlSystem _cutsceneControl;
 
         private void Start()
@@ -29,7 +30,13 @@ namespace PointAndClick.Interactables
         public override void OnInteractionExecute()
         {
             _cutsceneControl.FadeOut(() =>
-                SceneManager.LoadScene(_sceneName)
+                {
+                    if(GameSystemManager.Instance.UiCanvas)
+                    {
+                        GameSystemManager.Instance.UiCanvas.gameObject.SetActive(_shouldShowUiOnNextScene);
+                    }
+                    SceneManager.LoadScene(_sceneName);
+                }
             );
         }
     }
