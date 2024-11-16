@@ -6,8 +6,7 @@ namespace Conversation
 {
     public class ResourceLibrarySystem : GameSystem
     {
-        private CharacterDataLibrary _characterDataLibrary;
-
+        [SerializeField] private CharacterDataLibrary _characterDataLibrary;
 
         public CharacterData GetCharacterData(string id) => 
             _characterDataLibrary.GetCharacterData(id);
@@ -17,7 +16,7 @@ namespace Conversation
             FindCharacterDataManager();
         }
 
-        [ContextMenu("Find CharacterDataManager")]
+        [ContextMenu("Find CharacterDataLibrary")]
         private void FindCharacterDataManager()
         {
             _characterDataLibrary = gameObject.GetComponent<CharacterDataLibrary>();

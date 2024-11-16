@@ -1,9 +1,8 @@
 using JetBrains.Annotations;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using SystemManagement;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using Yarn.Unity;
@@ -23,18 +22,17 @@ namespace Conversation.UI
         [SerializeField] protected GameObject _dialogueHistoryPrefab;
         [SerializeField] protected Transform _dialogueContainer;
 
-        // todo - temp solution. create character objects to store this information.
-        [SerializeField] protected Color _npcHistoryColor;
-        [SerializeField] protected Color _playerHistoryColor;
-
         [SerializeField] protected OptionView optionViewPrefab;
         [SerializeField] protected Transform _optionViewContainer;
         [SerializeField] protected CanvasGroup canvasGroup;
         [SerializeField] protected UnityEvent _onDialogueStarted;
 
-        protected List<OptionView> optionViews = new List<OptionView>();
-        protected Action<int> OnOptionSelected;
+        protected List<OptionView> _optionViews = new List<OptionView>();
+        protected Action<int> _onOptionSelected;
         protected string _lastOptionTextSelected = string.Empty;
+
+        protected ResourceLibrarySystem ResourceLibrarySystem => _resourceLibrarySystem ??= GameSystemManager.Instance.GetSystem<ResourceLibrarySystem>("ResourceLibrary");
+        protected ResourceLibrarySystem _resourceLibrarySystem;
 
         private void Awake()
         {
@@ -64,14 +62,17 @@ namespace Conversation.UI
             Debug.Log("Running line - " + dialogueLine.Text.Text);
             if (_shouldShowDialogueHistory)
             {
-                CreatePastDialogueRecord(lineText.text, _npcHistoryColor);
+                Color npcHistoryColor = ResourceLibrarySystem.GetCharacterData("Green")?.HistoricTextColor ?? Color.grey;
+                CreatePastDialogueRecord(lineText.text, npcHistoryColor);
                 if (!String.IsNullOrEmpty(_lastOptionTextSelected))
                 {
-                    CreatePastDialogueRecord(_lastOptionTextSelected, _playerHistoryColor);
+                    Color playerHistoryColor = ResourceLibrarySystem.GetCharacterData("Blue")?.HistoricTextColor ?? Color.grey;
+                    CreatePastDialogueRecord(_lastOptionTextSelected, playerHistoryColor);
                     _lastOptionTextSelected = String.Empty;
                 }
             }
             lineText.text = dialogueLine.Text.Text;
+            lineText.color = ResourceLibrarySystem.GetCharacterData(dialogueLine.CharacterName)?.ActiveTextColor ?? Color.white;
         }
 
         private void CreatePastDialogueRecord(string text, Color color)
@@ -89,7 +90,7 @@ namespace Conversation.UI
 
             Debug.Log("Running options...");
             // If we don't already have enough option views, create more
-            while (dialogueOptions.Length > optionViews.Count)
+            while (dialogueOptions.Length > _optionViews.Count)
             {
                 Debug.Log("Creating new option view");
                 var optionView = CreateNewOptionView();
@@ -102,7 +103,7 @@ namespace Conversation.UI
             for (int i = 0; i < dialogueOptions.Length; i++)
             {
 
-                var optionView = optionViews[i];
+                var optionView = _optionViews[i];
                 var option = dialogueOptions[i];
                 Debug.Log("Init dialogue option " + i + " text: " + option.Line.Text.Text);
 
@@ -126,7 +127,7 @@ namespace Conversation.UI
             }
 
             // Note the delegate to call when an option is selected
-            OnOptionSelected = onOptionSelected;
+            _onOptionSelected = onOptionSelected;
 
             // sometimes (not always) the TMP layout in conjunction with the
             // content size fitters doesn't update the rect transform
@@ -136,7 +137,7 @@ namespace Conversation.UI
 
             /// <summary>
             /// Creates and configures a new <see cref="OptionView"/>, and adds
-            /// it to <see cref="optionViews"/>.
+            /// it to <see cref="_optionViews"/>.
             /// </summary>
             OptionView CreateNewOptionView()
             {
@@ -145,7 +146,7 @@ namespace Conversation.UI
                 optionView.transform.SetAsLastSibling();
 
                 optionView.OnOptionSelected = OptionViewWasSelected;
-                optionViews.Add(optionView);
+                _optionViews.Add(optionView);
 
                 return optionView;
             }
@@ -163,12 +164,12 @@ namespace Conversation.UI
                 }
 
                 Debug.Log("Selected option " + option.Line.Text.Text);
-                foreach (var optionView in optionViews)
+                foreach (var optionView in _optionViews)
                 {
                     optionView.gameObject.SetActive(false);
                 }
 
-                OnOptionSelected(option.DialogueOptionID);
+                _onOptionSelected(option.DialogueOptionID);
             }
         }
 
@@ -180,8 +181,8 @@ namespace Conversation.UI
             }
 
             Debug.Log("Dialogue complete");
-            OnOptionSelected = null;
-            foreach (var optionView in optionViews)
+            _onOptionSelected = null;
+            foreach (var optionView in _optionViews)
             {
                 optionView.gameObject.SetActive(false);
             }
