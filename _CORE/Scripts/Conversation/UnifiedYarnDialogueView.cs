@@ -32,7 +32,6 @@ namespace Conversation.UI
         [SerializeField] protected CanvasGroup canvasGroup;
         [SerializeField] protected UnityEvent _onDialogueStarted;
 
-
         protected List<OptionView> optionViews = new List<OptionView>();
         protected Action<int> OnOptionSelected;
         protected string _lastOptionTextSelected = string.Empty;

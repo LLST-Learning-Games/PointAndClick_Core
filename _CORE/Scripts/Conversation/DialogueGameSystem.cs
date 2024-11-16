@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Yarn.Unity;
 
@@ -20,7 +21,7 @@ namespace Conversation
 
         private void Reset()
         {
-             FindDialogueRunner();
+            FindDialogueRunner();
         }
 
         [ContextMenu("Find Dialogue Runner")]
