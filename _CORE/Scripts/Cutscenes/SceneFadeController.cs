@@ -16,9 +16,12 @@ namespace Cutscenes
         [SerializeField] private float _fadeOutTime = 0.2f;
         [SerializeField] private bool _manuallyControlSceneFade = false;
 
-        private void Awake()
+        private void Start()
         {
-            SceneManager.sceneLoaded += FadeInOnSceneLoad;
+            if(!_manuallyControlSceneFade)
+            {
+                SceneManager.sceneLoaded += FadeInOnSceneLoad;
+            }
         }
 
         private void OnDestroy()
@@ -42,19 +45,19 @@ namespace Cutscenes
             }
         }
 
-        public void FadeIn(Action callback = null) => StartCoroutine(FadeInCoroutine(callback));
-        public void FadeOut(Action callback = null) => StartCoroutine(FadeOutCoroutine(callback));
+        public void FadeIn(Action callback = null, float? overrideTime = null) => StartCoroutine(FadeInCoroutine(callback, overrideTime));
+        public void FadeOut(Action callback = null, float? overrideTime = null) => StartCoroutine(FadeOutCoroutine(callback, overrideTime));
 
-        private IEnumerator FadeInCoroutine(Action callback = null)
+        private IEnumerator FadeInCoroutine(Action callback = null, float? overrideTime = null)
         {
             SetFaderAlpha(1f);
 
             _faderImage.gameObject.SetActive(true);
             yield return StartCoroutine(PauseFader(_pauseBeforeFadeInTime));
-            yield return StartCoroutine(Fade(0f, _fadeInTime, callback));
+            yield return StartCoroutine(Fade(0f, overrideTime ?? _fadeInTime, callback));
         }
 
-        private IEnumerator FadeOutCoroutine(Action callback = null)
+        private IEnumerator FadeOutCoroutine(Action callback = null, float? overrideTime = null)
         {
             if (!_manuallyControlSceneFade)
             {
@@ -65,7 +68,7 @@ namespace Cutscenes
             SetFaderAlpha(0f);
 
             _faderImage.gameObject.SetActive(true);
-            yield return StartCoroutine(Fade(1f, _fadeOutTime));
+            yield return StartCoroutine(Fade(1f, overrideTime ?? _fadeOutTime));
             yield return StartCoroutine(PauseFader(_pauseAfterFadeOutTime, callback));
         }
 
