@@ -16,18 +16,29 @@ namespace Cutscenes
             _cutscenes[0].RunCutscene(this);
         }
 
-        private void Awake()
+        public override void Initialize()
         {
+            _sceneFadeController.RegisterListeners();
             foreach (var trigger in _triggers)
             {
+                trigger.RegisterParent(this);
                 trigger.RegisterTrigger();
+            }
+        }
+
+        private void OnDestroy()
+        {
+            foreach(var trigger in _triggers)
+            {
+                trigger.DeregisterTrigger();
             }
         }
 
         public void FadeIn(Action callback = null, float? overrideTime = null) => _sceneFadeController.FadeIn(callback, overrideTime);
         public void FadeOut(Action callback = null, float? overrideTime = null) => _sceneFadeController.FadeOut(callback, overrideTime);
-        public void SetManualFadeControl(bool manualFadeControl) 
-            => _sceneFadeController.SetManualFadeControl(manualFadeControl);
+        public void SetManualFadeControl(string sceneName) => _sceneFadeController.SetManualFadeControl(sceneName);
+        public void ReleaseManualFadeControl(string sceneName) => _sceneFadeController.ReleaseManualFadeControl(sceneName);
+
 
     }
 }

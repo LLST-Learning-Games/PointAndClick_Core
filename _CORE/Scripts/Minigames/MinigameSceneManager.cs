@@ -6,6 +6,11 @@ public class MinigameSceneManager : GameSystem
 {
     public bool IsMinigameLoaded { get; private set; }
 
+    public override void Initialize()
+    {
+        //..
+    }
+
     public void RequestSceneLoad(int index)
     {
         if (IsMinigameLoaded)

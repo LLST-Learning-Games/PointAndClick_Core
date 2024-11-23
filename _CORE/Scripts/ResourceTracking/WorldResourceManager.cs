@@ -9,4 +9,8 @@ public class WorldResourceManager : GameSystem
     
     public WorldResource GetResourceByName(string name) => _resources.First(x => x.ResourceName == name);
 
+    public override void Initialize()
+    {
+        //..
+    }
 }

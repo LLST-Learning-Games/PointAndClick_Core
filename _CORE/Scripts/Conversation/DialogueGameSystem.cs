@@ -10,6 +10,11 @@ namespace Conversation
 
         public DialogueRunner GetDialogueRunner() => _dialogueRunner;
 
+        public override void Initialize()
+        {
+            //..
+        }
+
         public void StartDialogue(string key) 
         {
             if (_dialogueRunner.IsDialogueRunning)
@@ -25,10 +30,10 @@ namespace Conversation
         }
 
         [ContextMenu("Find Dialogue Runner")]
-        [ExecuteInEditMode] 
         private void FindDialogueRunner()
         {
             _dialogueRunner = gameObject.GetComponent<DialogueRunner>();
         }
+
     }
 }

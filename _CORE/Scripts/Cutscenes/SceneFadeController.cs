@@ -1,6 +1,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -14,14 +15,11 @@ namespace Cutscenes
         [SerializeField] private float _fadeInTime = 0.3f;
         [SerializeField] private float _pauseAfterFadeOutTime = 0.1f;
         [SerializeField] private float _fadeOutTime = 0.2f;
-        [SerializeField] private bool _manuallyControlSceneFade = false;
+        [SerializeField] private HashSet<string> _manuallyControlSceneFade = new();
 
-        private void Start()
+        public void RegisterListeners()
         {
-            if(!_manuallyControlSceneFade)
-            {
-                SceneManager.sceneLoaded += FadeInOnSceneLoad;
-            }
+            SceneManager.sceneLoaded += FadeInOnSceneLoad;
         }
 
         private void OnDestroy()
@@ -29,20 +27,25 @@ namespace Cutscenes
             SceneManager.sceneLoaded -= FadeInOnSceneLoad;
         }
 
-        public void SetManualFadeControl(bool manualFadeControl)
-            => _manuallyControlSceneFade = manualFadeControl;
-
-        private void FadeInOnSceneLoad(Scene _, LoadSceneMode mode)
+        public void SetManualFadeControl(string sceneName)
         {
-            if (_manuallyControlSceneFade)
+            _manuallyControlSceneFade.Add(sceneName);
+        }
+
+        public void ReleaseManualFadeControl(string sceneName)
+        {
+            _manuallyControlSceneFade.Remove(sceneName);
+        }
+
+        private void FadeInOnSceneLoad(Scene newScene, LoadSceneMode mode)
+        {
+            if (_manuallyControlSceneFade.Contains(newScene.name)
+                || mode == LoadSceneMode.Additive)
             {
                 return;
             }
 
-            if (mode != LoadSceneMode.Additive)
-            {
-                FadeIn();
-            }
+            FadeIn();
         }
 
         public void FadeIn(Action callback = null, float? overrideTime = null) => StartCoroutine(FadeInCoroutine(callback, overrideTime));
@@ -59,7 +62,8 @@ namespace Cutscenes
 
         private IEnumerator FadeOutCoroutine(Action callback = null, float? overrideTime = null)
         {
-            if (!_manuallyControlSceneFade)
+            string sceneName = SceneManager.GetActiveScene().name;
+            if (!_manuallyControlSceneFade.Contains(sceneName))
             {
                 _faderImage.gameObject.SetActive(false);
                 yield return null;

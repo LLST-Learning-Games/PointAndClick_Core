@@ -25,6 +25,18 @@ namespace SystemManagement
 
         private void Awake()
         {
+            InitializeSingleton();
+
+            foreach (var system in _monoSystems)
+            {
+                system.Initialize();
+                _systems.Add(system.GetId(), system);
+            }
+
+        }
+
+        private void InitializeSingleton()
+        {
             if (Instance is null)
             {
                 Instance = this;
@@ -35,12 +47,6 @@ namespace SystemManagement
                 Destroy(this);
                 return;
             }
-
-            foreach (var system in _monoSystems)
-            {
-                _systems.Add(system.GetId(), system);
-            }
-
         }
 
         public T GetSystem<T>(string id) where T : GameSystem
@@ -52,7 +58,13 @@ namespace SystemManagement
 
             throw new GameSystemException($"[{GetType().Name}] Could not find system with id {id}");
         }
+
+        private void OnDestroy()
+        {
+            Debug.Log($"[{GetType().Name}] Destroying GameSystemManager");
+        }
     }
+
 
     public class GameSystemException : System.Exception
     {

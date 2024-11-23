@@ -7,6 +7,10 @@ namespace Conversation
     public class ResourceLibrarySystem : GameSystem
     {
         [SerializeField] private CharacterDataLibrary _characterDataLibrary;
+        public override void Initialize()
+        {
+            //..
+        }
 
         public CharacterData GetCharacterData(string id) => 
             _characterDataLibrary.GetCharacterData(id);
@@ -21,5 +25,6 @@ namespace Conversation
         {
             _characterDataLibrary = gameObject.GetComponent<CharacterDataLibrary>();
         }
+
     }
 }

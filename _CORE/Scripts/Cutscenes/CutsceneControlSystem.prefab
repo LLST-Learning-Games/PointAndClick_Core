@@ -49,6 +49,8 @@ MonoBehaviour:
   _systemId: CutsceneControl
   _cutscenes:
   - {fileID: 1604393048858228616}
+  _triggers:
+  - {fileID: 3075311097343954788}
   _sceneFadeController: {fileID: 407708476842444641}
 --- !u!114 &407708476842444641
 MonoBehaviour:
@@ -67,7 +69,6 @@ MonoBehaviour:
   _fadeInTime: 0.3
   _pauseAfterFadeOutTime: 0.1
   _fadeOutTime: 0.2
-  _manuallyControlSceneFade: 0
 --- !u!1001 &8837831803027192028
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -134,6 +135,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8657d0b5e0b74fe48aa17261954c9d14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &3075311097343954788 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5767978716132358072, guid: a25aa3adfdd6c394d92ce0ce9417d491, type: 3}
+  m_PrefabInstance: {fileID: 8837831803027192028}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d64357cf0c341fe9904ce542f0958c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!4 &7338436093533700884 stripped

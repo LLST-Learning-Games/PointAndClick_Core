@@ -57,5 +57,10 @@ namespace Inventory
             _inventory.Remove(item.Name);
             IsDirty = true;
         }
+
+        public override void Initialize()
+        {
+            //..
+        }
     }
 }

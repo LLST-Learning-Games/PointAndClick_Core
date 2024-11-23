@@ -12,12 +12,19 @@ namespace Persistence
         private ScenePersistenceDictionary _currentSceneDictionary;
         public string LastSceneName { get; private set; }
 
-        private void Awake()
+        public override void Initialize()
+        {
+            CreatePersistenceDictionary();
+            RegisterListeners();
+        }
+
+        private void CreatePersistenceDictionary()
         {
             _currentSceneDictionary = new ScenePersistenceDictionary();
             _persistence.Add(SceneManager.GetActiveScene().name, _currentSceneDictionary);
         }
-        private void Start()
+
+        private void RegisterListeners()
         {
             Debug.Log($"[{GetType().Name}] Registering listeners");
             SceneManager.sceneLoaded += OnSceneChanged;

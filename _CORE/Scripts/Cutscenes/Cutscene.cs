@@ -10,7 +10,6 @@ namespace Cutscenes
         [SerializeField] private string _cutsceneName;
         [SerializeField] private List<BaseCutsceneStep> _cutsceneSteps;
         [SerializeField] private bool _blockInput = true;
-        [SerializeField] private bool _overrideSceneFadeIn = false;
 
         private BaseCutsceneStep _currentStep;
         public Action OnCutsceneStepComplete;
@@ -23,8 +22,6 @@ namespace Cutscenes
                 PlayerInputLock.RegisterLock(_cutsceneName);
             }
 
-            parentSystem.SetManualFadeControl(_overrideSceneFadeIn);
-
             foreach (var step in _cutsceneSteps) 
             { 
                 _currentStep = step;
@@ -35,8 +32,6 @@ namespace Cutscenes
             {
                 PlayerInputLock.ClearLock(_cutsceneName);
             }
-
-            parentSystem.SetManualFadeControl(false);
 
             Debug.Log($"[{GetType().Name}] End of cutscene with id: {_cutsceneName}");
         }
