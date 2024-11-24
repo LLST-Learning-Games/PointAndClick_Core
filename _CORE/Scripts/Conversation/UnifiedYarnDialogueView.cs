@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using SystemManagement;
@@ -29,8 +28,8 @@ namespace Conversation.UI
 
         protected List<OptionView> _optionViews = new List<OptionView>();
         protected Action<int> _onOptionSelected;
-        protected string _lastOptionTextSelected = string.Empty;
-        protected LocalizedLine _lastLine;
+        protected LocalizedLine _lastDilaogueLine;
+        protected LocalizedLine _lastOptionLine;
 
         protected ResourceLibrarySystem ResourceLibrarySystem => _resourceLibrarySystem ??= GameSystemManager.Instance.GetSystem<ResourceLibrarySystem>("ResourceLibrary");
         protected ResourceLibrarySystem _resourceLibrarySystem;
@@ -61,20 +60,20 @@ namespace Conversation.UI
         private void DisplayNextLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
             Debug.Log("Running line - " + dialogueLine.Text.Text);
-            if (_shouldShowDialogueHistory && _lastLine != null)
+            if (_shouldShowDialogueHistory && _lastDilaogueLine != null)
             {
-                Color npcHistoryColor = ResourceLibrarySystem.GetCharacterData(_lastLine.CharacterName)?.HistoricTextColor ?? Color.grey;
-                CreatePastDialogueRecord(lineText.text, npcHistoryColor);
-                if (!String.IsNullOrEmpty(_lastOptionTextSelected))
+                Color npcHistoryColor = ResourceLibrarySystem.GetCharacterData(_lastDilaogueLine.CharacterName)?.HistoricTextColor ?? Color.grey;
+                CreatePastDialogueRecord(_lastDilaogueLine.Text.Text, npcHistoryColor);
+                if (_lastOptionLine != null)
                 {
-                    Color playerHistoryColor = ResourceLibrarySystem.GetCharacterData("Blue")?.HistoricTextColor ?? Color.grey;
-                    CreatePastDialogueRecord(_lastOptionTextSelected, playerHistoryColor);
-                    _lastOptionTextSelected = String.Empty;
+                    Color playerHistoryColor = ResourceLibrarySystem.GetCharacterData(_lastOptionLine.CharacterName)?.HistoricTextColor ?? Color.grey;
+                    CreatePastDialogueRecord(_lastOptionLine.Text.Text, playerHistoryColor);
+                    _lastOptionLine = null;
                 }
             }
             lineText.text = dialogueLine.Text.Text;
             lineText.color = ResourceLibrarySystem.GetCharacterData(dialogueLine.CharacterName)?.ActiveTextColor ?? Color.white;
-            _lastLine = dialogueLine;
+            _lastDilaogueLine = dialogueLine;
         }
 
         private void CreatePastDialogueRecord(string text, Color color)
@@ -162,7 +161,7 @@ namespace Conversation.UI
 
                 if (_shouldShowDialogueHistory) 
                 {
-                    _lastOptionTextSelected = option.Line.Text.Text;
+                    _lastOptionLine = option.Line;
                 }
 
                 Debug.Log("Selected option " + option.Line.Text.Text);
@@ -170,7 +169,7 @@ namespace Conversation.UI
                 {
                     optionView.gameObject.SetActive(false);
                 }
-
+                
                 _onOptionSelected(option.DialogueOptionID);
             }
         }
