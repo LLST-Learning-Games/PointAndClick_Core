@@ -30,6 +30,7 @@ namespace Conversation.UI
         protected List<OptionView> _optionViews = new List<OptionView>();
         protected Action<int> _onOptionSelected;
         protected string _lastOptionTextSelected = string.Empty;
+        protected LocalizedLine _lastLine;
 
         protected ResourceLibrarySystem ResourceLibrarySystem => _resourceLibrarySystem ??= GameSystemManager.Instance.GetSystem<ResourceLibrarySystem>("ResourceLibrary");
         protected ResourceLibrarySystem _resourceLibrarySystem;
@@ -60,9 +61,9 @@ namespace Conversation.UI
         private void DisplayNextLine(LocalizedLine dialogueLine, Action onDialogueLineFinished)
         {
             Debug.Log("Running line - " + dialogueLine.Text.Text);
-            if (_shouldShowDialogueHistory)
+            if (_shouldShowDialogueHistory && _lastLine != null)
             {
-                Color npcHistoryColor = ResourceLibrarySystem.GetCharacterData("Green")?.HistoricTextColor ?? Color.grey;
+                Color npcHistoryColor = ResourceLibrarySystem.GetCharacterData(_lastLine.CharacterName)?.HistoricTextColor ?? Color.grey;
                 CreatePastDialogueRecord(lineText.text, npcHistoryColor);
                 if (!String.IsNullOrEmpty(_lastOptionTextSelected))
                 {
@@ -73,6 +74,7 @@ namespace Conversation.UI
             }
             lineText.text = dialogueLine.Text.Text;
             lineText.color = ResourceLibrarySystem.GetCharacterData(dialogueLine.CharacterName)?.ActiveTextColor ?? Color.white;
+            _lastLine = dialogueLine;
         }
 
         private void CreatePastDialogueRecord(string text, Color color)

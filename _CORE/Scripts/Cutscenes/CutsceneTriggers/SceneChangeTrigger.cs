@@ -24,7 +24,7 @@ namespace Cutscenes
         public override void DeregisterTrigger()
         {
             SceneManager.sceneLoaded -= SceneLoadWrapper;
-            _parentSystem.ReleaseManualFadeControl(_requiredSceneName);
+            _parentSystem?.ReleaseManualFadeControl(_requiredSceneName);
         }
 
     }
