@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -8,6 +6,7 @@ namespace Cutscenes
     public abstract class BaseCutsceneStep : MonoBehaviour
     {
         [SerializeField] private bool _waitForStepToComplete = true;
+        [SerializeField] public bool BlockInput = true;
 
         public CutsceneStepState StepState { get; private set; } = CutsceneStepState.WaitingToStart;
 

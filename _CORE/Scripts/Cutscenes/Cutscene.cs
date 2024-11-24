@@ -17,21 +17,23 @@ namespace Cutscenes
         public async void RunCutscene(CutsceneControlSystem parentSystem)
         {
             Debug.Log($"[{GetType().Name}] Running cutscene with id: {_cutsceneName}");            
-            if (_blockInput)
-            {
-                PlayerInputLock.RegisterLock(_cutsceneName);
-            }
+
 
             foreach (var step in _cutsceneSteps) 
-            { 
+            {             
+                if (step.BlockInput)
+                {
+                    PlayerInputLock.RegisterLock(_cutsceneName);
+                }
                 _currentStep = step;
-                await _currentStep.TriggerStep(parentSystem);
+                await _currentStep.TriggerStep(parentSystem);            
+                if (step.BlockInput)
+                {
+                    PlayerInputLock.ClearLock(_cutsceneName);
+                }
             }
             OnCutsceneStepComplete?.Invoke();
-            if (_blockInput)
-            {
-                PlayerInputLock.ClearLock(_cutsceneName);
-            }
+
 
             Debug.Log($"[{GetType().Name}] End of cutscene with id: {_cutsceneName}");
         }
