@@ -25,6 +25,8 @@ namespace Conversation.UI
         [SerializeField] protected Transform _optionViewContainer;
         [SerializeField] protected CanvasGroup canvasGroup;
         [SerializeField] protected UnityEvent _onDialogueStarted;
+        
+        [SerializeField] protected Animator _animator;
 
         protected List<OptionView> _optionViews = new List<OptionView>();
         protected Action<int> _onOptionSelected;
@@ -43,12 +45,25 @@ namespace Conversation.UI
 
         public override void DialogueStarted()
         {
-            canvasGroup.alpha = 1;
             canvasGroup.blocksRaycasts = true;
             if (_shouldBlockClicks)
             {
                 PlayerInputLock.RegisterLock(DIALOGUE_LOCK_KEY);
             }
+
+            if (_animator != null)
+            {
+                _animator.SetTrigger("OnStarted");
+            }
+            else
+            {
+                canvasGroup.alpha = 1;
+                _onDialogueStarted?.Invoke();
+            }
+        }
+
+        public void OnDialogueStartedAnimationComplete()
+        {
             _onDialogueStarted?.Invoke();
         }
 
@@ -187,7 +202,16 @@ namespace Conversation.UI
             {
                 optionView.gameObject.SetActive(false);
             }
-            canvasGroup.alpha = 0;
+            
+            if (_animator != null)
+            {
+                _animator.SetTrigger("OnEnded");
+            }
+            else
+            {
+                canvasGroup.alpha = 0;
+            }
+            
             canvasGroup.blocksRaycasts = false;
         }
 
