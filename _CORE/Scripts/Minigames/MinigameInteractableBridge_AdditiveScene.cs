@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Minigames
 {
-    public class MinigameInteractableBridge : BaseInteractableBridge
+    public class MinigameInteractableBridge_AdditiveScene : BaseInteractableBridge
     {
         [SerializeField] private int _minigameSceneIndex;
         [SerializeField] private MinigameSceneManager _sceneManager;
