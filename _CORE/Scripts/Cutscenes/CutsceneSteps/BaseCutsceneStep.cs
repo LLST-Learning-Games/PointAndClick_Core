@@ -5,7 +5,7 @@ namespace Cutscenes
 {
     public abstract class BaseCutsceneStep : MonoBehaviour
     {
-        [SerializeField] private bool _waitForStepToComplete = true;
+        [SerializeField] private bool _waitForStepToComplete = true;        // todo - make this work or remove it
         [SerializeField] public bool BlockInput = true;
 
         public CutsceneStepState StepState { get; private set; } = CutsceneStepState.WaitingToStart;
